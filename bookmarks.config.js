@@ -1,6 +1,8 @@
 const CONFIG = {};
 export default CONFIG;
 
+CONFIG.faviconSize = 24;
+
 CONFIG.bookmarks = [
   {
     name: "Google",
@@ -15,6 +17,11 @@ CONFIG.bookmarks = [
   {
     name: "Manorama Online",
     link: "https://manoramaonline.com/",
+    icon: "",
+  },
+  {
+    name: "Copilot",
+    link: "https://copilot.microsoft.com",
     icon: "",
   },
 ];
