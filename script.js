@@ -22,6 +22,8 @@ function asBookmarkTemplate(bookmark) {
     const a = document.createElement("a");
     a.classList.add("bookmark");
     a.setAttribute("href", link);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("rel", "noopener noreferrer");
     const img = document.createElement("img");
     img.classList.add("bookmark-icon");
     icon = img.setAttribute("src", FAVICON_FETCH_URL(link));
