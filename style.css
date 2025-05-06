@@ -38,20 +38,16 @@ body {
   flex-direction: row;
   align-items: center;
   height: fit-content;
-  /* border: 1px solid #000; */
-  border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
   color: #000;
   padding: 8px;
-  opacity: 0.75;
   flex-shrink: 0;
+  filter: grayscale();
 }
 
 .bookmark:hover {
-  /* background-color: #000; */
-  /* color: #fff; */
-  opacity: 1;
+  filter: none;
 }
 
 .bookmark-icon {
