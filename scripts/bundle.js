@@ -10,7 +10,7 @@ const path = require("path");
   const jsFile = "src/script.js";
 
   const distFolder = "dist";
-  const bundleFile = distFolder + "/bundle.html";
+  const bundleFile = distFolder + "/index.html";
   const dependencyFiles = ["src/bookmark-icon-placeholder.png", "src/bookmarks.config.js"];
 
   // Ensure the destination folder exists
