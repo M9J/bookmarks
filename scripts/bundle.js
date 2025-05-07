@@ -12,6 +12,12 @@ const path = require("path");
   const distFolder = "dist";
   const bundleFile = distFolder + "/index.html";
   const dependencies = ["src/bookmarks"];
+  const dir = path.join(__dirname, "myDirectory");
+
+  // Check if the directory exists and remove it
+  if (fs.existsSync(distFolder)) {
+    fs.rmSync(distFolder, { recursive: true, force: true });
+  }
 
   // Ensure the destination folder exists
   if (!fs.existsSync(distFolder)) {
