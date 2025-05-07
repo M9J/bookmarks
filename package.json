@@ -1,5 +1,24 @@
 {
-  "dependencies": {
+  "name": "bookmarks",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/M9J/bookmarks#readme",
+  "bugs": {
+    "url": "https://github.com/M9J/bookmarks/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M9J/bookmarks.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "node ./scripts/bundle.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
     "clean-css": "^5.3.3",
     "html-minifier-terser": "^7.2.0",
     "terser": "^5.39.0"
