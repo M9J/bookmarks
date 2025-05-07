@@ -24,4 +24,8 @@ CONFIG.bookmarks = [
     link: "https://copilot.microsoft.com",
     icon: "",
   },
+  {
+    name: "HexlangFavorites",
+    link: "https://youtube.com/playlist?list=PLj4C4XLN4tqhYEk_qLOFvDRRlV1N8jQBL&si=fbOkP2eAe-tm5esU"
+  },
 ];
