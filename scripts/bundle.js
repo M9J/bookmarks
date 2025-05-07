@@ -11,7 +11,7 @@ const path = require("path");
 
   const distFolder = "dist";
   const bundleFile = distFolder + "/index.html";
-  const dependencyFiles = ["src/bookmark-icon-placeholder.png"];
+  const dependencies = ["src/bookmark-icon-placeholder.png", "bookmarks"];
 
   // Ensure the destination folder exists
   if (!fs.existsSync(distFolder)) {
@@ -65,12 +65,36 @@ const path = require("path");
 
   console.log(`Bundle HTML generated: ${path.basename(bundleFile)}`);
 
-  // Copy dependency files
-  dependencyFiles.forEach((file) => {
-    const destination = path.join(distFolder, path.basename(file));
-    fs.copyFileSync(file, destination);
-    console.log(`Copied: ${file} -> ${destination}`);
-  });
+  for (const item of dependencies) {
+    const srcPath = path.resolve(item); // Get absolute path
+    const destPath = path.join(distFolder, path.basename(item));
+
+    if (fs.existsSync(srcPath)) {
+      if (fs.statSync(srcPath).isDirectory()) {
+        copyDirectory(srcPath, destPath);
+        console.log(`Copied directory: ${srcPath} -> ${destPath}`);
+      } else {
+        fs.copyFileSync(srcPath, destPath);
+        console.log(`Copied file: ${srcPath} -> ${destPath}`);
+      }
+    } else {
+      console.warn(`Warning: ${srcPath} does not exist.`);
+    }
+  }
 
   console.log("Bundling completed.");
 })();
+
+function copyDirectory(src, dest) {
+  fs.mkdirSync(dest, { recursive: true });
+  fs.readdirSync(src).forEach((file) => {
+    const srcFile = path.join(src, file);
+    const destFile = path.join(dest, file);
+
+    if (fs.statSync(srcFile).isDirectory()) {
+      copyDirectory(srcFile, destFile);
+    } else {
+      fs.copyFileSync(srcFile, destFile);
+    }
+  });
+}

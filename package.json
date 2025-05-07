@@ -15,7 +15,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "build": "node ./scripts/bundle.js"
+    "bundle": "node ./scripts/bundle.js"
   },
   "dependencies": {},
   "devDependencies": {
