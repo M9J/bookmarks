@@ -38,36 +38,43 @@ body {
   align-content: flex-start;
   gap: 16px;
   padding: 16px;
+  background-color: #333;
 }
 
 .bookmark {
+  color: #000;
+  background-color: #fff;
   display: flex;
   flex-direction: row;
   align-items: center;
   height: fit-content;
   cursor: pointer;
   text-decoration: none;
-  color: #000;
   padding: 8px;
   flex-shrink: 0;
-  border-radius: 8px;
-  transition: filter 0.25s ease, opacity 0.25s ease;
-  filter: grayscale();
+  border-radius: 100px;
+  transition: outline 0.25s ease, opacity 0.25s ease;
   box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .bookmark:hover {
-  filter: none;
   box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5);
+  outline: 4px solid #0073ff;
+}
+
+.bookmark:active {
+  outline: 4px solid #000;
 }
 
 .bookmark-icon {
   height: var(--faviconHeight);
   width: var(--faviconWidth);
   object-fit: contain;
+  padding: 8px;
 }
 
 .bookmark-name {
   text-align: center;
   padding-left: 8px;
+  padding-right: 16px;
 }
