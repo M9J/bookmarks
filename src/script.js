@@ -9,7 +9,7 @@ getBookmarks();
 async function getBookmarks() {
   const bookmarksFolder = "./bookmarks";
   try {
-    const bookmarksFolderIndexModule = await import(bookmarksFolder + "/_.js");
+    const bookmarksFolderIndexModule = await import(bookmarksFolder + "/_index.js");
     if (bookmarksFolderIndexModule) {
       const bookmarkIndex = bookmarksFolderIndexModule.default;
       const hasBookmarkIndex = Array.isArray(bookmarkIndex) ? bookmarkIndex.length > 0 : false;
