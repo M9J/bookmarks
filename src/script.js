@@ -12,7 +12,7 @@ CONFIG.faviconFetchService = (link) =>
 async function getBookmarks() {
   const bookmarksFolder = "./bookmarks";
   try {
-    const bookmarksFolderIndexModule = await fetch(bookmarksFolder + "/_.json");
+    const bookmarksFolderIndexModule = await fetch(bookmarksFolder + "/index.json");
     if (bookmarksFolderIndexModule) {
       const bookmarkIndex = await bookmarksFolderIndexModule.json();
       const hasBookmarkIndex = Array.isArray(bookmarkIndex) ? bookmarkIndex.length > 0 : false;
@@ -28,7 +28,7 @@ async function getBookmarks() {
       }
     }
   } catch (err) {
-    console.error("bookmarks folder or bookmarks/_.json not found");
+    console.error("bookmarks folder or bookmarks/index.json not found");
   }
 }
 
