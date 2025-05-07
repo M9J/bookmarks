@@ -26,6 +26,6 @@ CONFIG.bookmarks = [
   },
   {
     name: "HexlangFavorites",
-    link: "https://youtube.com/playlist?list=PLj4C4XLN4tqhYEk_qLOFvDRRlV1N8jQBL&si=fbOkP2eAe-tm5esU"
+    link: "https://www.youtube.com/playlist?list=PLj4C4XLN4tqhYEk_qLOFvDRRlV1N8jQBL"
   },
 ];
