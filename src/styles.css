@@ -1,3 +1,8 @@
+:root {
+  --faviconWidth: 24px;
+  --faviconHeight: 24px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -51,8 +56,8 @@ body {
 }
 
 .bookmark-icon {
-  height: 24px;
-  width: 24px;
+  height: var(--faviconHeight);
+  width: var(--faviconWidth);
   object-fit: contain;
 }
 
