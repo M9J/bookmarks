@@ -7,7 +7,7 @@ CONFIG.faviconFetchService = (link) =>
 getBookmarks();
 
 async function getBookmarks() {
-  const bookmarksFolder = "../bookmarks";
+  const bookmarksFolder = "./bookmarks";
   try {
     const bookmarksFolderIndexModule = await import(bookmarksFolder + "/_.js");
     if (bookmarksFolderIndexModule) {
