@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Run bundle script
-        run: node bundle.js
+        run: node ./scripts/bundle.js
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
