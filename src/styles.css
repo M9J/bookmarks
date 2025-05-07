@@ -23,9 +23,11 @@ body {
 }
 
 .header {
-  padding: 8px;
+  padding: 16px;
   background-color: #000;
   color: #fff;
+  font-weight: 100;
+  letter-spacing: 2px;
 }
 
 .bookmark-container {
@@ -34,8 +36,8 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 8px;
-  padding: 8px;
+  gap: 16px;
+  padding: 16px;
 }
 
 .bookmark {
@@ -48,11 +50,15 @@ body {
   color: #000;
   padding: 8px;
   flex-shrink: 0;
+  border-radius: 8px;
+  transition: filter 0.25s ease, opacity 0.25s ease;
   filter: grayscale();
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 .bookmark:hover {
   filter: none;
+  box-shadow: 4px 8px 16px rgba(0, 0, 0, 0.5);
 }
 
 .bookmark-icon {

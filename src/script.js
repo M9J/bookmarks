@@ -35,7 +35,8 @@ function asBookmarkTemplate(bookmark) {
     let icon = bookmark.ICON;
     if (!icon && link !== "javascript:void(0)") icon = CONFIG.faviconFetchService(link);
     if (!icon) icon = "./bookmark-icon-placeholder.png";
-    const name = bookmark.NAME || bookmark.LINK;
+    let name = bookmark.NAME || bookmark.LINK;
+    if (bookmark.ICON_ONLY) name = null;
     const a = document.createElement("a");
     a.classList.add("bookmark");
     a.setAttribute("href", link);
@@ -49,7 +50,7 @@ function asBookmarkTemplate(bookmark) {
     div.classList.add("bookmark-name");
     div.innerHTML = name;
     a.appendChild(img);
-    a.appendChild(div);
+    if (name) a.appendChild(div);
     return a;
   }
 }

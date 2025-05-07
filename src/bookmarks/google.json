@@ -1,5 +1,5 @@
 {
   "NAME": "Google",
   "LINK": "https://google.com/",
-  "ICON": ""
+  "ICON_ONLY": true
 }
