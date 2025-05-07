@@ -1,4 +1,5 @@
 {
   "NAME": "Copilot",
-  "LINK": "https://copilot.microsoft.com"
+  "LINK": "https://copilot.microsoft.com",
+  "ICON_ONLY": true
 }
