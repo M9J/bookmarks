@@ -9,9 +9,9 @@ getBookmarks();
 async function getBookmarks() {
   const bookmarksFolder = "./bookmarks";
   try {
-    const bookmarksFolderIndexModule = await import(bookmarksFolder + "/_index.js");
+    const bookmarksFolderIndexModule = await fetch(bookmarksFolder + "/_.json");
     if (bookmarksFolderIndexModule) {
-      const bookmarkIndex = bookmarksFolderIndexModule.default;
+      const bookmarkIndex = await bookmarksFolderIndexModule.json();
       const hasBookmarkIndex = Array.isArray(bookmarkIndex) ? bookmarkIndex.length > 0 : false;
       if (hasBookmarkIndex) {
         const sortedBookmarkIndex = bookmarkIndex.sort();
@@ -25,7 +25,7 @@ async function getBookmarks() {
       }
     }
   } catch (err) {
-    console.error("bookmarks folder or bookmarks/_.js not found");
+    console.error("bookmarks folder or bookmarks/_.json not found");
   }
 }
 
