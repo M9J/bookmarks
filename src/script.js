@@ -1,6 +1,8 @@
-import CONFIG from "./bookmarks.config.js";
 const bookmarkContainer = document.getElementById("bookmark-container");
-const FAVICON_FETCH_URL = (link) => CONFIG.faviconFetchServiceURL(link);
+const CONFIG = {};
+CONFIG.faviconSize = 24;
+CONFIG.faviconFetchService = (link) =>
+  `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${link}&size=${CONFIG.faviconSize}`;
 
 getBookmarks();
 
@@ -23,7 +25,7 @@ async function getBookmarks() {
       }
     }
   } catch (err) {
-    console.error("bookmarks/_index.js not found");
+    console.error("bookmarks folder or bookmarks/_.js not found");
   }
 }
 
@@ -31,7 +33,7 @@ function asBookmarkTemplate(bookmark) {
   if (bookmark) {
     const link = bookmark.LINK || "javascript:void(0)";
     let icon = bookmark.ICON;
-    if (!icon && link !== "javascript:void(0)") icon = FAVICON_FETCH_URL(link);
+    if (!icon && link !== "javascript:void(0)") icon = CONFIG.faviconFetchService(link);
     if (!icon) icon = "./bookmark-icon-placeholder.png";
     const name = bookmark.NAME || bookmark.LINK;
     const a = document.createElement("a");

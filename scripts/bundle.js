@@ -11,7 +11,7 @@ const path = require("path");
 
   const distFolder = "dist";
   const bundleFile = distFolder + "/index.html";
-  const dependencyFiles = ["src/bookmark-icon-placeholder.png", "src/bookmarks.config.js"];
+  const dependencyFiles = ["src/bookmark-icon-placeholder.png"];
 
   // Ensure the destination folder exists
   if (!fs.existsSync(distFolder)) {
