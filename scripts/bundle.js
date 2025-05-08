@@ -11,7 +11,7 @@ const path = require("path");
 
   const distFolder = "dist";
   const bundleFile = distFolder + "/index.html";
-  const dependencies = ["src/bookmarks"];
+  const dependencies = ["src/bookmarks", "src/manifest.json"];
   const dir = path.join(__dirname, "myDirectory");
 
   // Check if the directory exists and remove it
