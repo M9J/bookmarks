@@ -18,13 +18,13 @@ async function getBookmarks() {
       const hasBookmarkIndex = Array.isArray(bookmarkIndex) ? bookmarkIndex.length > 0 : false;
       if (hasBookmarkIndex) {
         const sortedBookmarkIndex = bookmarkIndex.sort();
-        for (const bookmarkFile of sortedBookmarkIndex) {
-          const bookmarkConfig = await fetch(bookmarksFolder + "/" + bookmarkFile + ".json");
-          if (bookmarkConfig) {
-            const config = await bookmarkConfig.json();
-            bookmarkContainer.appendChild(asBookmarkTemplate(config));
-          }
-        }
+        const bookmarkFileFetchPromises = sortedBookmarkIndex.map((bookmarkFileName) =>
+          fetch(bookmarksFolder + "/" + bookmarkFileName + ".json").then((res) => res.json())
+        );
+        const bookmarksConfigs = await Promise.all(bookmarkFileFetchPromises);
+        bookmarksConfigs.forEach((bookmarkConfig) => {
+          bookmarkContainer.appendChild(asBookmarkTemplate(bookmarkConfig));
+        });
       }
     }
   } catch (err) {

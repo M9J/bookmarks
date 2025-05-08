@@ -8,12 +8,31 @@
       href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAABH0lEQVRYw2NgGAVUArGNZIBYJAPa/pMB2kYNGDVg1IBRA0YNGDVg1IARacCO6KQdFBjwcpI1C6v11JfkGvC4QoWFgYFFvfoxmQYkCTGBJJmE48ky4KoNM0ya2eoqyQbc7VNnRMgzak68S5oBZzNlGJHbgYwy6WdJMWCvpyB6U1LA8xDxBszUYsNsjLLpzCHWgFoJRmzNWUbxSqIMOBLPj6tFzBd7hLABi5zYcbep2Z3nEzDgZaUmE75WOaN62WN8BhyPEiPUsBeLPoXbgEOunIS7BhxO+3EY8HKDAXG9C811L7EZcLxYnNj+iVjBEUwD1vnzE9/D4fNeiW7AfFNOUvpIHEazUA3ok2QmrZfFLN6JbIAdC+kdNRa70c4qtQAA7m/LhSePmzgAAAAASUVORK5CYII="
       type="image/x-icon"
     />
+    <link
+      rel="preload"
+      href="bookmarks/index.json"
+      as="fetch"
+      type="application/json"
+      crossorigin="anonymous"
+    />
+    <title>Bookmarks</title>
     <link rel="stylesheet" href="styles.css" />
     <script type="module" src="script.js"></script>
-    <title>Bookmarks</title>
   </head>
   <body>
     <a href="https://github.com/m9j/bookmarks" target="_blank" class="header">BOOKMARKS</a>
     <div class="bookmark-container" id="bookmark-container"></div>
+    <div class="youtube-embed-container">
+      <iframe
+        width="560"
+        height="315"
+        src="https://www.youtube-nocookie.com/embed/videoseries?si=MaFCMWTQ1fdfYUww&amp;list=PLj4C4XLN4tqhYEk_qLOFvDRRlV1N8jQBL"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      ></iframe>
+    </div>
   </body>
 </html>

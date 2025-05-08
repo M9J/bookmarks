@@ -40,6 +40,8 @@ body {
   gap: 16px;
   padding: 16px;
   background-color: #333;
+  min-height: 0;
+  overflow: auto;
 }
 
 .bookmark {
@@ -78,4 +80,15 @@ body {
   text-align: center;
   padding-left: 8px;
   padding-right: 16px;
+}
+
+.youtube-embed-container {
+  display: flex;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+}
+
+.youtube-embed-container iframe {
+  width: 100%;
 }
