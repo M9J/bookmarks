@@ -27,7 +27,8 @@
 
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
+  //navigator.serviceWorker.register('/sw.js')
+navigator.serviceWorker.register("https://m9j.github.io/bookmarks/sw.js")
     .then(() => {
 console.log('Service Worker Registered');
 alert("Service worker registered");
