@@ -82,10 +82,3 @@ body {
   padding-right: 16px;
 }
 
-.youtube-embed-container {
-  display: flex;
-  background: #333;
-  align-items: center;
-  justify-content: center;
-}
-
