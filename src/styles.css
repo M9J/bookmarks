@@ -84,11 +84,8 @@ body {
 
 .youtube-embed-container {
   display: flex;
-  background: #000;
+  background: #333;
   align-items: center;
   justify-content: center;
 }
 
-.youtube-embed-container iframe {
-  width: 100%;
-}
