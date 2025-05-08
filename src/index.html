@@ -35,7 +35,7 @@ alert("Service worker registered");
 })
     .catch(error => {
 console.error('Service Worker Registration Failed:', error);
-alert("Service worker registration failed");
+alert("Service worker registration failed: "+JSON.stringify(error));
 });
 }
 </script>
