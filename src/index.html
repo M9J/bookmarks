@@ -8,8 +8,8 @@
       href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAABH0lEQVRYw2NgGAVUArGNZIBYJAPa/pMB2kYNGDVg1IBRA0YNGDVg1IARacCO6KQdFBjwcpI1C6v11JfkGvC4QoWFgYFFvfoxmQYkCTGBJJmE48ky4KoNM0ya2eoqyQbc7VNnRMgzak68S5oBZzNlGJHbgYwy6WdJMWCvpyB6U1LA8xDxBszUYsNsjLLpzCHWgFoJRmzNWUbxSqIMOBLPj6tFzBd7hLABi5zYcbep2Z3nEzDgZaUmE75WOaN62WN8BhyPEiPUsBeLPoXbgEOunIS7BhxO+3EY8HKDAXG9C811L7EZcLxYnNj+iVjBEUwD1vnzE9/D4fNeiW7AfFNOUvpIHEazUA3ok2QmrZfFLN6JbIAdC+kdNRa70c4qtQAA7m/LhSePmzgAAAAASUVORK5CYII="
       type="image/x-icon"
     />
-    <meta name="theme-color" content="#000000">
-    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="manifest.json" />
     <link
       rel="preload"
       href="bookmarks/index.json"
@@ -25,19 +25,25 @@
     <a href="https://github.com/m9j/bookmarks" target="_blank" class="header">BOOKMARKS</a>
     <div class="bookmark-container" id="bookmark-container"></div>
 
-<script>
-if ('serviceWorker' in navigator) {
-  //navigator.serviceWorker.register('/sw.js')
-navigator.serviceWorker.register("https://m9j.github.io/bookmarks/sw.js")
-    .then(() => {
-console.log('Service Worker Registered');
-})
-    .catch(error => {
-console.error('Service Worker Registration Failed:', error);
-alert("Service worker registration failed: "+JSON.stringify(error));
-});
-}
-</script>
-
+    <script>
+      if ("serviceWorker" in navigator) {
+        let swPath;
+        const { hostname, pathname } = window.location;
+        if (hostname === "localhost") {
+          swPath = pathname.startsWith("/dist/") ? "/dist/sw.js" : "/src/sw.js";
+        } else swPath = "https://m9j.github.io/bookmarks/sw.js";
+        if (!navigator.serviceWorker.controller) {
+          navigator.serviceWorker
+            .register(swPath, { scope: "/" })
+            .then(() => {
+              console.log("Service Worker Registered");
+            })
+            .catch((error) => {
+              console.error("Service Worker Registration Failed:", error);
+              alert("Service Worker Registration Failed: " + error);
+            });
+        }
+      }
+    </script>
   </body>
 </html>
