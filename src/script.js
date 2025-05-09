@@ -39,6 +39,7 @@ function asBookmarkTemplate(bookmark) {
     if (bookmark.ICON_ONLY) name = null;
     const a = document.createElement("a");
     a.classList.add("bookmark");
+    if (bookmark.ICON_ONLY) a.classList.add("icon-only");
     a.setAttribute("href", link);
     a.setAttribute("target", "_blank");
     a.setAttribute("rel", "noopener noreferrer");
