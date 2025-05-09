@@ -27,14 +27,14 @@
 
     <script>
       if ("serviceWorker" in navigator) {
-        let swPath;
+        let hostDir;
         const { hostname, pathname } = window.location;
         if (hostname === "localhost") {
-          swPath = pathname.startsWith("/dist/") ? "/dist/sw.js" : "/src/sw.js";
-        } else swPath = "https://m9j.github.io/bookmarks/sw.js";
+          hostDir = pathname.startsWith("/dist/") ? "/dist" : "/src";
+        } else hostDir = "https://m9j.github.io/bookmarks";
         if (!navigator.serviceWorker.controller) {
           navigator.serviceWorker
-            .register(swPath, { scope: "/" })
+            .register(hostDir + "/sw.js")
             .then(() => {
               console.log("Service Worker Registered");
             })
