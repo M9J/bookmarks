@@ -26,9 +26,17 @@ body {
   padding: 16px;
   background-color: #000;
   color: #fff;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.brand {
   font-weight: 100;
   letter-spacing: 2px;
   text-decoration: none;
+  color: #fff;
 }
 
 .bookmark-container {
@@ -84,4 +92,25 @@ body {
 
 .icon-only {
   border-radius: 100px;
+}
+
+.settings-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  align-content: flex-start;
+}
+
+.settings-button {
+  height: fit-content;
+  padding: 8px;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: flex;
 }

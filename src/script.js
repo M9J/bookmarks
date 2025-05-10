@@ -1,4 +1,6 @@
 const bookmarkContainer = document.getElementById("bookmark-container");
+const settingsContainer = document.getElementById("settings-container");
+
 const CONFIG = {};
 CONFIG.faviconSize = 24;
 CONFIG.faviconFetchService = (link) =>
@@ -70,6 +72,45 @@ function getFavicons() {
     }
   }
 }
+
+function showSettings() {
+  bookmarkContainer.classList.remove("show");
+  bookmarkContainer.classList.add("hide");
+  settingsContainer.classList.add("show");
+}
+
+function closeSettings() {
+  settingsContainer.classList.remove("show");
+  settingsContainer.classList.add("hide");
+  bookmarkContainer.classList.add("show");
+}
+
+function unregisterServiceWorkers() {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    registrations.forEach((registration) => registration.unregister());
+    console.log("All service workers have been unregistered.");
+  });
+}
+
+function clearServiceWorkerCache() {
+  caches
+    .keys()
+    .then((keys) => {
+      return Promise.all(keys.map((key) => caches.delete(key)));
+    })
+    .then(() => {
+      console.log("All caches have been cleared.");
+    });
+}
+
+document.getElementById("show-settings-button").addEventListener("click", () => showSettings());
+document.getElementById("close-settings-button").addEventListener("click", () => closeSettings());
+document
+  .getElementById("unregister-service-worker-button")
+  .addEventListener("click", () => unregisterServiceWorkers());
+document
+  .getElementById("clear-service-worker-cache-button")
+  .addEventListener("click", () => clearServiceWorkerCache());
 
 const IMG_PLACEHOLDER =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAABH0lEQVRYw2NgGAVUArGNZIBYJAPa/pMB2kYNGDVg1IBRA0YNGDVg1IARacCO6KQdFBjwcpI1C6v11JfkGvC4QoWFgYFFvfoxmQYkCTGBJJmE48ky4KoNM0ya2eoqyQbc7VNnRMgzak68S5oBZzNlGJHbgYwy6WdJMWCvpyB6U1LA8xDxBszUYsNsjLLpzCHWgFoJRmzNWUbxSqIMOBLPj6tFzBd7hLABi5zYcbep2Z3nEzDgZaUmE75WOaN62WN8BhyPEiPUsBeLPoXbgEOunIS7BhxO+3EY8HKDAXG9C811L7EZcLxYnNj+iVjBEUwD1vnzE9/D4fNeiW7AfFNOUvpIHEazUA3ok2QmrZfFLN6JbIAdC+kdNRa70c4qtQAA7m/LhSePmzgAAAAASUVORK5CYII=";

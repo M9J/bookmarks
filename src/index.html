@@ -22,14 +22,29 @@
     <script type="module" src="script.js"></script>
   </head>
   <body>
-    <a href="https://github.com/m9j/bookmarks" target="_blank" class="header">BOOKMARKS</a>
+    <div class="header">
+      <a class="brand" href="https://github.com/m9j/bookmarks" target="_blank">BOOKMARKS</a>
+      <button class="settings-button" id="show-settings-button">Settings</button>
+    </div>
     <div class="bookmark-container" id="bookmark-container"></div>
+    <div class="settings-container hide" id="settings-container">
+      <div class="header">
+        Settings
+        <button class="settings-button" id="close-settings-button">&times;</button>
+      </div>
+      <button class="settings-button" id="unregister-service-worker-button">
+        Unregister Service Workers
+      </button>
+      <button class="settings-button" id="clear-service-worker-cache-button">
+        Clear Service Workers Cache
+      </button>
+    </div>
 
     <script>
       if ("serviceWorker" in navigator) {
         let hostDir;
         const { hostname, pathname } = window.location;
-        if (hostname === "localhost") {
+        if (["localhost", "127.0.0.1"].includes(hostname)) {
           hostDir = pathname.startsWith("/dist/") ? "/dist" : "/src";
         } else hostDir = "https://m9j.github.io/bookmarks";
         if (!navigator.serviceWorker.controller) {
