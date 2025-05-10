@@ -96,6 +96,7 @@ function hardreloadApplication() {
       })
       .then(() => {
         console.log("All caches have been cleared.");
+        location.reload();
       });
   });
 }
