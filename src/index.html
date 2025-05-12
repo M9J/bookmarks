@@ -24,14 +24,13 @@
   <body>
     <div class="header">
       <a class="brand" href="https://github.com/m9j/bookmarks" target="_blank">BOOKMARKS</a>
-      <button class="settings-button" id="show-settings-button">Settings</button>
+      <select class="view-list" id="view-list">
+        <option value="home">Home</option>
+        <option value="settings">Settings</option>
+      </select>
     </div>
     <div class="bookmark-container" id="bookmark-container"></div>
     <div class="settings-container hide" id="settings-container">
-      <div class="header">
-        Settings
-        <button class="settings-button" id="close-settings-button">&times;</button>
-      </div>
       <button class="settings-button" id="hard-reload-application-button">
         Hard reload application
       </button>

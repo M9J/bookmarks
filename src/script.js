@@ -24,7 +24,11 @@ async function getBookmarks() {
           fetch(bookmarksFolder + "/" + bookmarkFileName + ".json").then((res) => res.json())
         );
         const bookmarksConfigs = await Promise.all(bookmarkFileFetchPromises);
-        bookmarksConfigs.forEach((bookmarkConfig) => {
+        const categorizedBookmarksConfigs = [
+          ...bookmarksConfigs.filter((c) => c.ICON_ONLY),
+          ...bookmarksConfigs.filter((c) => !c.ICON_ONLY),
+        ];
+        categorizedBookmarksConfigs.forEach((bookmarkConfig) => {
           bookmarkContainer.appendChild(asBookmarkTemplate(bookmarkConfig));
         });
       }
@@ -59,7 +63,7 @@ function asBookmarkTemplate(bookmark) {
 }
 
 function getFavicons() {
-  const alinks = document.getElementsByTagName("a");
+  const alinks = document.querySelectorAll("a.bookmark");
   const hasAlinks = alinks ? alinks.length > 0 : false;
   if (hasAlinks) {
     for (let i = 0; i < alinks.length; i++) {
@@ -67,7 +71,9 @@ function getFavicons() {
       const href = item.getAttribute("href");
       if (href) {
         const itemIconImage = item.getElementsByTagName("img").item(0);
-        if (itemIconImage) itemIconImage.setAttribute("src", CONFIG.faviconFetchService(href));
+        const hrefURL = new URL(href);
+        const baseHref = hrefURL.protocol + "//" + hrefURL.hostname;
+        if (itemIconImage) itemIconImage.setAttribute("src", CONFIG.faviconFetchService(baseHref));
       }
     }
   }
@@ -82,7 +88,11 @@ function showSettings() {
 function closeSettings() {
   settingsContainer.classList.remove("show");
   settingsContainer.classList.add("hide");
+}
+
+function showHome() {
   bookmarkContainer.classList.add("show");
+  closeSettings();
 }
 
 function hardreloadApplication() {
@@ -101,8 +111,14 @@ function hardreloadApplication() {
   });
 }
 
-document.getElementById("show-settings-button").addEventListener("click", () => showSettings());
-document.getElementById("close-settings-button").addEventListener("click", () => closeSettings());
+document.getElementById("view-list").addEventListener("change", (event) => {
+  const { target } = event;
+  const selection = target.value;
+  console.log("event", event, "value", target.value);
+  if (selection === "settings") showSettings();
+  else showHome();
+});
+
 document
   .getElementById("hard-reload-application-button")
   .addEventListener("click", () => hardreloadApplication());
