@@ -3,7 +3,7 @@ const settingsContainer = document.getElementById("settings-container");
 
 const CONFIG = {};
 CONFIG.faviconSize = 24;
-CONFIG.faviconFetchService = (link) =>
+CONFIG.faviconFetchServiceURL = (link) =>
   `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${link}&size=${CONFIG.faviconSize}`;
 
 (async () => {
@@ -42,22 +42,26 @@ function asBookmarkTemplate(bookmark) {
   if (bookmark) {
     const link = bookmark.LINK || "javascript:void(0)";
     let name = bookmark.NAME || bookmark.LINK;
-    if (bookmark.ICON_ONLY) name = null;
     const a = document.createElement("a");
     a.classList.add("bookmark");
     if (bookmark.ICON_ONLY) a.classList.add("icon-only");
     a.setAttribute("href", link);
     a.setAttribute("target", "_blank");
     a.setAttribute("rel", "noopener noreferrer");
+    a.setAttribute("title", name);
     const img = document.createElement("img");
     img.classList.add("bookmark-icon");
     img.setAttribute("src", IMG_PLACEHOLDER);
     img.setAttribute("alt", "bookmark-icon");
+    img.setAttribute("loading", "lazy");
+    img.onerror = function () {
+      this.src = IMG_PLACEHOLDER;
+    };
     const div = document.createElement("div");
     div.classList.add("bookmark-name");
     div.innerHTML = name;
     a.appendChild(img);
-    if (name) a.appendChild(div);
+    if (!bookmark.ICON_ONLY) a.appendChild(div);
     return a;
   }
 }
@@ -67,13 +71,16 @@ function getFavicons() {
   const hasAlinks = alinks ? alinks.length > 0 : false;
   if (hasAlinks) {
     for (let i = 0; i < alinks.length; i++) {
+      console.log("current img src", alinks.item(i).getAttribute("src"));
       const item = alinks.item(i);
       const href = item.getAttribute("href");
       if (href) {
         const itemIconImage = item.getElementsByTagName("img").item(0);
         const hrefURL = new URL(href);
         const baseHref = hrefURL.protocol + "//" + hrefURL.hostname;
-        if (itemIconImage) itemIconImage.setAttribute("src", CONFIG.faviconFetchService(baseHref));
+        if (itemIconImage) {
+          itemIconImage.setAttribute("src", CONFIG.faviconFetchServiceURL(baseHref));
+        }
       }
     }
   }
@@ -114,7 +121,6 @@ function hardreloadApplication() {
 document.getElementById("view-list").addEventListener("change", (event) => {
   const { target } = event;
   const selection = target.value;
-  console.log("event", event, "value", target.value);
   if (selection === "settings") showSettings();
   else showHome();
 });
