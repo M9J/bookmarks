@@ -41,7 +41,7 @@ async function getBookmarks() {
       }
     }
   } catch (err) {
-    console.error("bookmarks folder or bookmarks/index.json not found", err);
+    console.error("bookmarks folder or bookmarks/index.json not found. Error:", err);
   }
 }
 
