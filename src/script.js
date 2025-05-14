@@ -20,37 +20,54 @@ async function getBookmarks() {
       const hasBookmarkIndex = Array.isArray(bookmarkIndex) ? bookmarkIndex.length > 0 : false;
       if (hasBookmarkIndex) {
         const sortedBookmarkIndex = bookmarkIndex.sort();
+        insertBookmarkTemplateSlots(sortedBookmarkIndex);
         const bookmarkFileFetchPromises = sortedBookmarkIndex.map((bookmarkFileName) =>
-          fetch(bookmarksFolder + "/" + bookmarkFileName + ".json").then((res) => res.json())
+          fetch(bookmarksFolder + "/" + bookmarkFileName + ".json")
+            .then((res) => res.json())
+            .then((res) => {
+              res.bookmarkIndexName = bookmarkFileName;
+              return res;
+            })
         );
         const bookmarksConfigs = await Promise.all(bookmarkFileFetchPromises);
         const categorizedBookmarksConfigs = [
           ...bookmarksConfigs.filter((c) => c.ICON_ONLY),
           ...bookmarksConfigs.filter((c) => !c.ICON_ONLY),
         ];
-        categorizedBookmarksConfigs.forEach((bookmarkConfig) => {
-          bookmarkContainer.appendChild(asBookmarkTemplate(bookmarkConfig));
+        const bookmarkElements = document.querySelectorAll("a.bookmark");
+        categorizedBookmarksConfigs.forEach((bookmarkConfig, index) => {
+          updateBookmarkTemplate(bookmarkConfig, bookmarkElements.item(index));
         });
       }
     }
   } catch (err) {
-    console.error("bookmarks folder or bookmarks/index.json not found");
+    console.error("bookmarks folder or bookmarks/index.json not found", err);
   }
 }
 
-function asBookmarkTemplate(bookmark) {
-  if (bookmark) {
-    const link = bookmark.LINK || "javascript:void(0)";
-    let name = bookmark.NAME || bookmark.LINK;
+function insertBookmarkTemplateSlots(bookmarkIndex) {
+  for (let i = 0; i < bookmarkIndex.length; i++) {
     const a = document.createElement("a");
     a.classList.add("bookmark");
+    const img = document.createElement("img");
+    img.classList.add("bookmark-icon");
+    img.setAttribute("src", IMG_PLACEHOLDER);
+    a.appendChild(img);
+    bookmarkContainer.appendChild(a);
+  }
+}
+
+function updateBookmarkTemplate(bookmark, bookmarkElem) {
+  if (bookmark && bookmarkElem) {
+    const link = bookmark.LINK || "javascript:void(0)";
+    let name = bookmark.NAME || bookmark.LINK;
+    const a = bookmarkElem;
     if (bookmark.ICON_ONLY) a.classList.add("icon-only");
     a.setAttribute("href", link);
     a.setAttribute("target", "_blank");
     a.setAttribute("rel", "noopener noreferrer");
     a.setAttribute("title", name);
-    const img = document.createElement("img");
-    img.classList.add("bookmark-icon");
+    const img = a.querySelector("img.bookmark-icon");
     img.setAttribute("src", IMG_PLACEHOLDER);
     img.setAttribute("alt", "bookmark-icon");
     img.setAttribute("loading", "lazy");
@@ -62,7 +79,6 @@ function asBookmarkTemplate(bookmark) {
     div.innerHTML = name;
     a.appendChild(img);
     if (!bookmark.ICON_ONLY) a.appendChild(div);
-    return a;
   }
 }
 
@@ -71,7 +87,6 @@ function getFavicons() {
   const hasAlinks = alinks ? alinks.length > 0 : false;
   if (hasAlinks) {
     for (let i = 0; i < alinks.length; i++) {
-      console.log("current img src", alinks.item(i).getAttribute("src"));
       const item = alinks.item(i);
       const href = item.getAttribute("href");
       if (href) {
