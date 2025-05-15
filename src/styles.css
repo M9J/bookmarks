@@ -30,6 +30,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
+  border-bottom: 8px solid red;
 }
 
 .brand {
@@ -47,7 +48,7 @@ body {
   align-content: flex-start;
   gap: 16px;
   padding: 16px;
-  background-color: #333;
+  background-color: #000;
   min-height: 0;
   overflow: auto;
 }
