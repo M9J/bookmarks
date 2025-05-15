@@ -10,7 +10,7 @@ const jsFile = "src/script.js";
 
 const distFolder = "dist";
 const bundleFile = distFolder + "/index.html";
-const versionFile = distFolder + "/version";
+const versionFile = distFolder + "/version.json";
 const dependencies = ["src/bookmarks", "src/manifest.json", "src/sw.js", "src/favicon.ico"];
 
 (async () => {
