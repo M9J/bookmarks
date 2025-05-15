@@ -128,7 +128,12 @@ async function checkVersion() {
         console.warn(
           `Latest version (${latestVersion}) is available. Hard reload to fetch latest copy.`
         );
-      }
+      } else
+        console.log(
+          `Current version: ${localStorage.getItem(
+            "currentVersion"
+          )}, Latest version: ${latestVersion}`
+        );
     } catch (err) {
       console.error("Version check failed:", err);
     }
