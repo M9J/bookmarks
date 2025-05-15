@@ -9,7 +9,7 @@ CONFIG.faviconFetchServiceURL = (link) =>
 (async () => {
   await getBookmarks();
   getFavicons();
-  checkLatestVersion();
+  checkVersion();
 })();
 
 async function getBookmarks() {
@@ -102,28 +102,35 @@ function getFavicons() {
   }
 }
 
-async function checkLatestVersion() {
+async function checkVersion() {
   if (typeof localStorage !== "undefined") {
-    const currentVersion = localStorage.getItem("currentVersion");
-    if (!currentVersion) localStorage.setItem("currentVersion", "1.0");
+    const currentVersionURL = "./version.json";
     const latestVersionURL = "https://m9j.github.io/bookmarks/version.json";
     try {
-      const latestVersionResp = await fetch(latestVersionURL);
-      if (latestVersionResp) {
-        const latestVersionJSON = await latestVersionResp.json();
-        if (latestVersionJSON) {
-          const latestVersion = latestVersionJSON.version;
-          if (currentVersion !== latestVersion) {
-            console.warn("App seems to have latest version than current version.");
-            console.warn("Latest version: " + latestVersion);
-            console.warn("Current version: " + currentVersion);
-            return;
-          }
-          if (latestVersion > currentVersion) localStorage.setItem("currentVersion", latestVersion);
-        }
+      const currentVersionResp = await fetch(currentVersionURL);
+      if (!currentVersionResp.ok) throw new Error("Failed to fetch current version");
+
+      const latestVersionResp = await fetch(latestVersionURL, { cache: "no-store" });
+      if (!latestVersionResp.ok) throw new Error("Failed to fetch latest version");
+
+      const currentVersionJSON = await currentVersionResp.json();
+      const currentVersion = currentVersionJSON.version;
+      if (currentVersion !== localStorage.getItem("currentVersion")) {
+        localStorage.setItem("currentVersion", currentVersion);
+      }
+
+      const latestVersionJSON = await latestVersionResp.json();
+      const latestVersion = latestVersionJSON.version;
+
+      // Ensure proper type conversion for version comparison
+      if (Number(latestVersion) > Number(currentVersion)) {
+        // Store latest version and notify user to reload manually
+        console.warn(
+          `Latest version (${latestVersion}) is available. Hard reload to fetch latest copy.`
+        );
       }
     } catch (err) {
-      console.error(err);
+      console.error("Version check failed:", err);
     }
   }
 }
