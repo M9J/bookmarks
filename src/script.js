@@ -132,19 +132,18 @@ async function checkVersion() {
       )} <br>Latest version: ${asReadableDate(latestVersion)}`;
       settingsContainer.prepend(vdiv);
 
-      const ldiv = document.createElement("div");
-      ldiv.classList.add("banner-info");
-      ldiv.innerHTML = `Latest version (${asReadableDate(
-        latestVersion
-      )}) is available. <br>Hard reload to fetch latest copy.`;
-      settingsContainer.prepend(ldiv);
-
       // Ensure proper type conversion for version comparison
       if (Number(latestVersion) > Number(currentVersion)) {
         // Store latest version and notify user to reload manually
         console.warn(
           `Latest version (${latestVersion}) is available. Hard reload to fetch latest copy.`
         );
+        const ldiv = document.createElement("div");
+        ldiv.classList.add("banner-info");
+        ldiv.innerHTML = `Latest version (${asReadableDate(
+          latestVersion
+        )}) is available. <br>Hard reload to fetch latest copy.`;
+        settingsContainer.prepend(ldiv);
       } else
         console.log(
           `Current version: ${localStorage.getItem(
