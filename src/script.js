@@ -68,6 +68,7 @@ function updateBookmarkTemplate(bookmark, bookmarkElem) {
     a.setAttribute("target", "_blank");
     a.setAttribute("rel", "noopener noreferrer");
     a.setAttribute("title", name);
+    if (bookmark.ICON) a.setAttribute("data-bookmark-icon", bookmark.ICON);
     const img = a.querySelector("img.bookmark-icon");
     img.setAttribute("src", IMG_PLACEHOLDER);
     img.setAttribute("alt", "bookmark-icon");
@@ -90,8 +91,18 @@ function getFavicons() {
     for (let i = 0; i < alinks.length; i++) {
       const item = alinks.item(i);
       const href = item.getAttribute("href");
+      const bkIcon = item.getAttribute("data-bookmark-icon");
+      const itemIconImage = item.getElementsByTagName("img").item(0);
+      if (bkIcon) {
+        if (itemIconImage) {
+          itemIconImage.setAttribute("src", bkIcon);
+          itemIconImage.onerror = function () {
+            this.src = IMG_PLACEHOLDER;
+          };
+          continue;
+        }
+      }
       if (href) {
-        const itemIconImage = item.getElementsByTagName("img").item(0);
         const hrefURL = new URL(href);
         const baseHref = hrefURL.protocol + "//" + hrefURL.hostname;
         if (itemIconImage) {
