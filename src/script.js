@@ -9,6 +9,7 @@ CONFIG.faviconFetchServiceURL = (link) =>
 (async () => {
   await getBookmarks();
   getFavicons();
+  checkLatestVersion();
 })();
 
 async function getBookmarks() {
@@ -97,6 +98,32 @@ function getFavicons() {
           itemIconImage.setAttribute("src", CONFIG.faviconFetchServiceURL(baseHref));
         }
       }
+    }
+  }
+}
+
+async function checkLatestVersion() {
+  if (typeof localStorage !== "undefined") {
+    const currentVersion = localStorage.getItem("currentVersion");
+    if (!currentVersion) localStorage.setItem("currentVersion", "1.0");
+    const latestVersionURL = "https://m9j.github.io/bookmarks/version.json";
+    try {
+      const latestVersionResp = await fetch(latestVersionURL);
+      if (latestVersionResp) {
+        const latestVersionJSON = await latestVersionResp.json();
+        if (latestVersionJSON) {
+          const latestVersion = latestVersionJSON.version;
+          if (currentVersion !== latestVersion) {
+            console.warn("App seems to have latest version than current version.");
+            console.warn("Latest version: " + latestVersion);
+            console.warn("Current version: " + currentVersion);
+            return;
+          }
+          if (latestVersion > currentVersion) localStorage.setItem("currentVersion", latestVersion);
+        }
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
 }
