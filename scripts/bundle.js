@@ -4,16 +4,16 @@ const Terser = require("terser");
 const htmlMinifier = require("html-minifier-terser");
 const path = require("path");
 
+const indexFile = "src/index.html";
+const cssFile = "src/styles.css";
+const jsFile = "src/script.js";
+
+const distFolder = "dist";
+const bundleFile = distFolder + "/index.html";
+const versionFile = distFolder + "/version";
+const dependencies = ["src/bookmarks", "src/manifest.json", "src/sw.js", "src/favicon.ico"];
+
 (async () => {
-  const indexFile = "src/index.html";
-  const cssFile = "src/styles.css";
-  const jsFile = "src/script.js";
-
-  const distFolder = "dist";
-  const bundleFile = distFolder + "/index.html";
-  const dependencies = ["src/bookmarks", "src/manifest.json", "src/sw.js", "src/favicon.ico"];
-  const dir = path.join(__dirname, "myDirectory");
-
   // Check if the directory exists and remove it
   if (fs.existsSync(distFolder)) {
     fs.rmSync(distFolder, { recursive: true, force: true });
@@ -88,6 +88,8 @@ const path = require("path");
     }
   }
 
+  updateVersionInfoFile();
+
   console.log("Bundling completed.");
 })();
 
@@ -103,4 +105,11 @@ function copyDirectory(src, dest) {
       fs.copyFileSync(srcFile, destFile);
     }
   });
+}
+
+function updateVersionInfoFile() {
+  const latestVersion = {
+    version: Date.now().toString(),
+  };
+  fs.writeFileSync(versionFile, JSON.stringify(latestVersion, null, 2));
 }
