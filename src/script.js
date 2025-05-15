@@ -122,6 +122,23 @@ async function checkVersion() {
       const latestVersionJSON = await latestVersionResp.json();
       const latestVersion = latestVersionJSON.version;
 
+      const asReadableDate = (ts) => new Date(Number(ts)).toLocaleString();
+
+      const vdiv = document.createElement("div");
+      vdiv.innerHTML = `Current version (var): ${asReadableDate(
+        localStorage.getItem("currentVersion")
+      )} <br>Current version (json): ${asReadableDate(
+        currentVersion
+      )} <br>Latest version: ${asReadableDate(latestVersion)}`;
+      settingsContainer.prepend(vdiv);
+
+      const ldiv = document.createElement("div");
+      ldiv.classList.add("banner-info");
+      ldiv.innerHTML = `Latest version (${asReadableDate(
+        latestVersion
+      )}) is available. <br>Hard reload to fetch latest copy.`;
+      settingsContainer.prepend(ldiv);
+
       // Ensure proper type conversion for version comparison
       if (Number(latestVersion) > Number(currentVersion)) {
         // Store latest version and notify user to reload manually
