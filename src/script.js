@@ -132,7 +132,7 @@ async function checkVersion() {
         console.log(
           `Current version: ${localStorage.getItem(
             "currentVersion"
-          )}, Latest version: ${latestVersion}`
+          )}/${currentVersion}, Latest version: ${latestVersion}`
         );
     } catch (err) {
       console.error("Version check failed:", err);
