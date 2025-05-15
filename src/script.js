@@ -96,6 +96,9 @@ function getFavicons() {
         const baseHref = hrefURL.protocol + "//" + hrefURL.hostname;
         if (itemIconImage) {
           itemIconImage.setAttribute("src", CONFIG.faviconFetchServiceURL(baseHref));
+          itemIconImage.onerror = function () {
+            this.src = IMG_PLACEHOLDER;
+          };
         }
       }
     }
