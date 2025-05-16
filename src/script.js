@@ -138,8 +138,6 @@ async function getCurrentVersion() {
 }
 
 function showSettings() {
-  bookmarkContainer.classList.remove("show");
-  bookmarkContainer.classList.add("hide");
   settingsContainer.classList.add("show");
 }
 
@@ -149,7 +147,6 @@ function closeSettings() {
 }
 
 function showHome() {
-  bookmarkContainer.classList.add("show");
   closeSettings();
 }
 
