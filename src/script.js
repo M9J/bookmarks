@@ -180,6 +180,7 @@ async function checkForLatestVersion() {
     latestVersion = latestVersionJSON.version;
   }
   if (Number(latestVersion)) {
+    console.log(Number(latestVersion), Number(CURRENT_VERSION));
     let isNew = Number(latestVersion) > Number(CURRENT_VERSION);
     const latestVersionDiv = document.getElementById("latest-version");
     if (isNew) {
