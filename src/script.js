@@ -182,10 +182,6 @@ async function checkForLatestVersion() {
   if (Number(latestVersion) && Number(CURRENT_VERSION) !== Number(latestVersion)) {
     if (Number(latestVersion) > Number(CURRENT_VERSION)) {
       console.warn(`Latest version is available. Hard reload to fetch latest copy.`);
-      const ldiv = document.createElement("div");
-      ldiv.classList.add("banner-info");
-      ldiv.innerHTML = `Latest version is available. Hard reload to fetch latest copy.`;
-      settingsContainer.prepend(ldiv);
       const latestVersionDiv = document.getElementById("latest-version");
       latestVersionDiv.innerHTML = `${unixEpochToVersion(latestVersion)} [LATEST]`;
     } else {
