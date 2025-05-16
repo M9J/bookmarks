@@ -83,7 +83,7 @@ function updateBookmarkTemplate(bookmark, bookmarkElem) {
   }
 }
 
-function getFavicons() {
+async function getFavicons() {
   const alinks = document.querySelectorAll("a.bookmark");
   const hasAlinks = alinks ? alinks.length > 0 : false;
   if (hasAlinks) {
@@ -109,52 +109,58 @@ async function checkVersion() {
   if (typeof localStorage !== "undefined") {
     const currentVersionURL = "./version.json";
     const latestVersionURL = "https://m9j.github.io/bookmarks/version.json";
+    let currentVersion = null;
+    let latestVersion = null;
     try {
       const currentVersionResp = await fetch(currentVersionURL);
-      if (!currentVersionResp.ok) throw new Error("Failed to fetch current version");
-
-      const latestVersionResp = await fetch(latestVersionURL, { cache: "no-store" });
-      if (!latestVersionResp.ok) throw new Error("Failed to fetch latest version");
-
-      const currentVersionJSON = await currentVersionResp.json();
-      const currentVersion = currentVersionJSON.version;
-      if (currentVersion !== localStorage.getItem("currentVersion")) {
-        localStorage.setItem("currentVersion", currentVersion);
+      if (!currentVersionResp.ok) {
+        console.log(new Error("Failed to fetch current version"));
+      } else {
+        const currentVersionJSON = await currentVersionResp.json();
+        currentVersion = currentVersionJSON.version;
       }
 
-      const latestVersionJSON = await latestVersionResp.json();
-      const latestVersion = latestVersionJSON.version;
+      const latestVersionResp = await fetch(latestVersionURL, { cache: "no-store" });
+      if (!latestVersionResp.ok) {
+        console.log(new Error("Failed to fetch latest version"));
+      } else {
+        const latestVersionJSON = await latestVersionResp.json();
+        latestVersion = latestVersionJSON.version;
+      }
 
       const asReadableDate = (ts) => new Date(Number(ts)).toLocaleString();
 
-      const vdiv = document.createElement("div");
-      vdiv.innerHTML = `Current version (var): ${asReadableDate(
-        localStorage.getItem("currentVersion")
-      )} <br>Current version (json): ${asReadableDate(
-        currentVersion
-      )} <br>Latest version: ${asReadableDate(latestVersion)}`;
-      settingsContainer.prepend(vdiv);
+      if (currentVersion || latestVersion) {
+        const vdiv = document.createElement("div");
+        vdiv.innerHTML = `Current version: ${unixEpochToVersion(
+          currentVersion
+        )} <br>Latest version: ${unixEpochToVersion(latestVersion)}`;
+        settingsContainer.prepend(vdiv);
+      }
 
-      // Ensure proper type conversion for version comparison
-      if (Number(latestVersion) > Number(currentVersion)) {
-        // Store latest version and notify user to reload manually
-        console.warn(
-          `Latest version (${latestVersion}) is available. Hard reload to fetch latest copy.`
-        );
-        const ldiv = document.createElement("div");
-        ldiv.classList.add("banner-info");
-        ldiv.innerHTML = `Latest version (${asReadableDate(
-          latestVersion
-        )}) is available. <br>Hard reload to fetch latest copy.`;
-        settingsContainer.prepend(ldiv);
-      } else
-        console.log(
-          `Current version: ${localStorage.getItem(
-            "currentVersion"
-          )}/${currentVersion}, Latest version: ${latestVersion}`
-        );
+      if (Number(latestVersion) && Number(currentVersion) !== Number(latestVersion)) {
+        if (Number(latestVersion) > Number(currentVersion)) {
+          console.warn(
+            `Latest version (${unixEpochToVersion(
+              latestVersion
+            )}) is available. Hard reload to fetch latest copy.`
+          );
+          const ldiv = document.createElement("div");
+          ldiv.classList.add("banner-info");
+          ldiv.innerHTML = `Latest version (${unixEpochToVersion(
+            latestVersion
+          )}) is available. <br>Hard reload to fetch latest copy.`;
+          settingsContainer.prepend(ldiv);
+        } else {
+          console.log(
+            `Current version: ${unixEpochToVersion(
+              currentVersion
+            )}, Latest version: ${unixEpochToVersion(latestVersion)}`
+          );
+        }
+      }
     } catch (err) {
-      console.error("Version check failed:", err);
+      console.error("Version check failed: ", err);
     }
   }
 }
@@ -204,3 +210,15 @@ document
 
 const IMG_PLACEHOLDER =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAABH0lEQVRYw2NgGAVUArGNZIBYJAPa/pMB2kYNGDVg1IBRA0YNGDVg1IARacCO6KQdFBjwcpI1C6v11JfkGvC4QoWFgYFFvfoxmQYkCTGBJJmE48ky4KoNM0ya2eoqyQbc7VNnRMgzak68S5oBZzNlGJHbgYwy6WdJMWCvpyB6U1LA8xDxBszUYsNsjLLpzCHWgFoJRmzNWUbxSqIMOBLPj6tFzBd7hLABi5zYcbep2Z3nEzDgZaUmE75WOaN62WN8BhyPEiPUsBeLPoXbgEOunIS7BhxO+3EY8HKDAXG9C811L7EZcLxYnNj+iVjBEUwD1vnzE9/D4fNeiW7AfFNOUvpIHEazUA3ok2QmrZfFLN6JbIAdC+kdNRa70c4qtQAA7m/LhSePmzgAAAAASUVORK5CYII=";
+
+function unixEpochToVersion(timestamp) {
+  if (timestamp) {
+    const dt = new Date(Number(timestamp));
+    const yearNum = dt.getFullYear();
+    const monthNum = String(dt.getMonth() + 1).padStart(2, "0");
+    const dayNum = String(dt.getDate()).padStart(2, "0");
+    const secs = dt.getHours() * 3600 + dt.getMinutes() * 60 + dt.getSeconds();
+    const version = `${yearNum}.${monthNum}${dayNum}.${secs}`;
+    return version;
+  }
+}
