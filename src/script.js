@@ -135,24 +135,18 @@ async function checkVersion() {
 
       if (currentVersion || latestVersion) {
         const vdiv = document.createElement("div");
-        vdiv.innerHTML = `Current version: ${unixEpochToVersion(
+        vdiv.innerHTML = `Versions:<br>${unixEpochToVersion(
           currentVersion
-        )} <br>Latest version: ${unixEpochToVersion(latestVersion)}`;
+        )} (CURRENT) <br>${unixEpochToVersion(latestVersion)} (LATEST)`;
         settingsContainer.prepend(vdiv);
       }
 
       if (Number(latestVersion) && Number(currentVersion) !== Number(latestVersion)) {
         if (Number(latestVersion) > Number(currentVersion)) {
-          console.warn(
-            `Latest version (${unixEpochToVersion(
-              latestVersion
-            )}) is available. Hard reload to fetch latest copy.`
-          );
+          console.warn(`Latest version is available. Hard reload to fetch latest copy.`);
           const ldiv = document.createElement("div");
           ldiv.classList.add("banner-info");
-          ldiv.innerHTML = `Latest version (${unixEpochToVersion(
-            latestVersion
-          )}) is available. <br>Hard reload to fetch latest copy.`;
+          ldiv.innerHTML = `Latest version is available. Hard reload to fetch latest copy.`;
           settingsContainer.prepend(ldiv);
         } else {
           console.log(
@@ -217,11 +211,12 @@ const IMG_PLACEHOLDER =
 function unixEpochToVersion(timestamp) {
   if (timestamp) {
     const dt = new Date(Number(timestamp));
-    const yearNum = dt.getFullYear();
-    const monthNum = String(dt.getMonth() + 1).padStart(2, "0");
-    const dayNum = String(dt.getDate()).padStart(2, "0");
-    const secs = dt.getHours() * 3600 + dt.getMinutes() * 60 + dt.getSeconds();
-    const version = `${yearNum}.${monthNum}${dayNum}.${secs}`;
+    const year = String(dt.getFullYear());
+    const month = String(dt.getMonth() + 1).padStart(2, "0");
+    const day = String(dt.getDate()).padStart(2, "0");
+    const secsTodayTillNow = dt.getHours() * 3600 + dt.getMinutes() * 60 + dt.getSeconds();
+    const secs = String(secsTodayTillNow).padStart(5, "0");
+    const version = `${year}.${month}${day}.${secs}`;
     return version;
   }
 }
