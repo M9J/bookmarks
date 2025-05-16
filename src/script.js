@@ -6,10 +6,12 @@ CONFIG.faviconSize = 24;
 CONFIG.faviconFetchServiceURL = (link) =>
   `https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${link}&size=${CONFIG.faviconSize}`;
 
+let CURRENT_VERSION = null;
+
 (async () => {
   await getBookmarks();
   getFavicons();
-  checkVersion();
+  getCurrentVersion();
 })();
 
 async function getBookmarks() {
@@ -110,55 +112,28 @@ async function getFavicons() {
   }
 }
 
-async function checkVersion() {
-  if (typeof localStorage !== "undefined") {
-    const currentVersionURL = "./version.json";
-    const latestVersionURL = "https://m9j.github.io/bookmarks/version.json";
-    let currentVersion = null;
-    let latestVersion = null;
-    try {
-      const currentVersionResp = await fetch(currentVersionURL);
-      if (!currentVersionResp.ok) {
-        console.log(new Error("Failed to fetch current version"));
-      } else {
-        const currentVersionJSON = await currentVersionResp.json();
-        currentVersion = currentVersionJSON.version;
-      }
-
-      const latestVersionResp = await fetch(latestVersionURL, { cache: "no-store" });
-      if (!latestVersionResp.ok) {
-        console.log(new Error("Failed to fetch latest version"));
-      } else {
-        const latestVersionJSON = await latestVersionResp.json();
-        latestVersion = latestVersionJSON.version;
-      }
-
-      if (currentVersion || latestVersion) {
-        const vdiv = document.createElement("div");
-        vdiv.innerHTML = `Versions:<br>${unixEpochToVersion(
-          currentVersion
-        )} [CURRENT] <br>${unixEpochToVersion(latestVersion)} [LATEST]`;
-        settingsContainer.prepend(vdiv);
-      }
-
-      if (Number(latestVersion) && Number(currentVersion) !== Number(latestVersion)) {
-        if (Number(latestVersion) > Number(currentVersion)) {
-          console.warn(`Latest version is available. Hard reload to fetch latest copy.`);
-          const ldiv = document.createElement("div");
-          ldiv.classList.add("banner-info");
-          ldiv.innerHTML = `Latest version is available. Hard reload to fetch latest copy.`;
-          settingsContainer.prepend(ldiv);
-        } else {
-          console.log(
-            `Current version: ${unixEpochToVersion(
-              currentVersion
-            )}, Latest version: ${unixEpochToVersion(latestVersion)}`
-          );
-        }
-      }
-    } catch (err) {
-      console.error("Version check failed: ", err);
+async function getCurrentVersion() {
+  const currentVersionURL = "./version.json";
+  let currentVersion = null;
+  try {
+    const currentVersionResp = await fetch(currentVersionURL);
+    if (!currentVersionResp.ok) {
+      console.log(new Error("Failed to fetch current version"));
+    } else {
+      const currentVersionJSON = await currentVersionResp.json();
+      currentVersion = currentVersionJSON.version;
+      CURRENT_VERSION = currentVersion;
     }
+
+    if (currentVersion) {
+      const vdiv = document.createElement("div");
+      vdiv.innerHTML = `Versions:<br><div id="current-version">${unixEpochToVersion(
+        currentVersion
+      )} [CURRENT] </div><div id="latest-version"></div>`;
+      settingsContainer.prepend(vdiv);
+    }
+  } catch (err) {
+    console.error("Version check failed: ", err);
   }
 }
 
@@ -178,7 +153,7 @@ function showHome() {
   closeSettings();
 }
 
-function hardreloadApplication() {
+function hardReloadApplication() {
   navigator.serviceWorker.getRegistrations().then((registrations) => {
     registrations.forEach((registration) => registration.unregister());
     console.log("All service workers have been unregistered.");
@@ -194,6 +169,37 @@ function hardreloadApplication() {
   });
 }
 
+async function checkForLatestVersion() {
+  const latestVersionURL = "https://m9j.github.io/bookmarks/version.json";
+  let latestVersion = null;
+  const latestVersionResp = await fetch(latestVersionURL, { cache: "no-store" });
+  if (!latestVersionResp.ok) {
+    console.log(new Error("Failed to fetch latest version"));
+  } else {
+    const latestVersionJSON = await latestVersionResp.json();
+    latestVersion = latestVersionJSON.version;
+  }
+  if (Number(latestVersion) && Number(CURRENT_VERSION) !== Number(latestVersion)) {
+    if (Number(latestVersion) > Number(CURRENT_VERSION)) {
+      console.warn(`Latest version is available. Hard reload to fetch latest copy.`);
+      const ldiv = document.createElement("div");
+      ldiv.classList.add("banner-info");
+      ldiv.innerHTML = `Latest version is available. Hard reload to fetch latest copy.`;
+      settingsContainer.prepend(ldiv);
+      const latestVersionDiv = document.getElementById("latest-version");
+      latestVersionDiv.innerHTML = `${unixEpochToVersion(latestVersion)} [LATEST]`;
+    } else {
+      console.log(
+        `Current version: ${unixEpochToVersion(
+          CURRENT_VERSION
+        )}, Latest version: ${unixEpochToVersion(latestVersion)}`
+      );
+      const latestVersionDiv = document.getElementById("latest-version");
+      latestVersionDiv.innerHTML = `${unixEpochToVersion(latestVersion)} [LATEST]`;
+    }
+  }
+}
+
 document.getElementById("view-list").addEventListener("change", (event) => {
   const { target } = event;
   const selection = target.value;
@@ -203,7 +209,10 @@ document.getElementById("view-list").addEventListener("change", (event) => {
 
 document
   .getElementById("hard-reload-application-button")
-  .addEventListener("click", () => hardreloadApplication());
+  .addEventListener("click", () => hardReloadApplication());
+document
+  .getElementById("check-for-latest-version-button")
+  .addEventListener("click", () => checkForLatestVersion());
 
 const IMG_PLACEHOLDER =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAABH0lEQVRYw2NgGAVUArGNZIBYJAPa/pMB2kYNGDVg1IBRA0YNGDVg1IARacCO6KQdFBjwcpI1C6v11JfkGvC4QoWFgYFFvfoxmQYkCTGBJJmE48ky4KoNM0ya2eoqyQbc7VNnRMgzak68S5oBZzNlGJHbgYwy6WdJMWCvpyB6U1LA8xDxBszUYsNsjLLpzCHWgFoJRmzNWUbxSqIMOBLPj6tFzBd7hLABi5zYcbep2Z3nEzDgZaUmE75WOaN62WN8BhyPEiPUsBeLPoXbgEOunIS7BhxO+3EY8HKDAXG9C811L7EZcLxYnNj+iVjBEUwD1vnzE9/D4fNeiW7AfFNOUvpIHEazUA3ok2QmrZfFLN6JbIAdC+kdNRa70c4qtQAA7m/LhSePmzgAAAAASUVORK5CYII=";
