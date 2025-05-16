@@ -167,13 +167,15 @@ function hardReloadApplication() {
 }
 
 async function checkForLatestVersion() {
-  const latestVersionURL = "https://m9j.github.io/bookmarks/version.json";
+  const latestVersionAPIURL =
+    "https://api.github.com/repos/m9j/bookmarks/contents/version.json?ref=gh-pages";
   let latestVersion = null;
-  const latestVersionResp = await fetch(latestVersionURL, { cache: "no-store" });
+  const latestVersionResp = await fetch(latestVersionAPIURL, { cache: "no-store" });
   if (!latestVersionResp.ok) {
     console.log(new Error("Failed to fetch latest version"));
   } else {
-    const latestVersionJSON = await latestVersionResp.json();
+    const latestVersionRespJSON = await latestVersionResp.json();
+    const latestVersionJSON = JSON.parse(atob(latestVersionRespJSON.content));
     latestVersion = latestVersionJSON.version;
   }
   if (Number(latestVersion)) {

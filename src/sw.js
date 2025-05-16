@@ -1,12 +1,19 @@
 const CACHE_NAME = "dynamic-cache-v2";
-
-// Define a regex pattern to match different environments
 const folderPattern = /^\/(src|dist)?\/?(bookmarks\/)?/;
+
+// Define API endpoint to exclude from caching
+const excludedAPI = "https://api.github.com/repos/m9j/bookmarks/contents/version.json?ref=gh-pages"; 
 
 self.addEventListener("fetch", (event) => {
   const requestURL = new URL(event.request.url);
 
-  // Check if the request path matches the pattern
+  // Check if the request should be excluded from caching
+  if (requestURL.href === excludedAPI) {
+    event.respondWith(fetch(event.request)); // Directly fetch from network
+    return;
+  }
+
+  // Normal caching logic for other requests
   if (folderPattern.test(requestURL.pathname)) {
     event.respondWith(
       caches
