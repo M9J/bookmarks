@@ -139,8 +139,6 @@ async function checkVersion() {
         latestVersion = latestVersionJSON.version;
       }
 
-      const asReadableDate = (ts) => new Date(Number(ts)).toLocaleString();
-
       if (currentVersion || latestVersion) {
         const vdiv = document.createElement("div");
         vdiv.innerHTML = `Current version: ${unixEpochToVersion(
