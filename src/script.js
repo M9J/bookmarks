@@ -137,7 +137,7 @@ async function checkVersion() {
         const vdiv = document.createElement("div");
         vdiv.innerHTML = `Versions:<br>${unixEpochToVersion(
           currentVersion
-        )} (CURRENT) <br>${unixEpochToVersion(latestVersion)} (LATEST)`;
+        )} [CURRENT] <br>${unixEpochToVersion(latestVersion)} [LATEST]`;
         settingsContainer.prepend(vdiv);
       }
 
