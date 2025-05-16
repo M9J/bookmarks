@@ -179,20 +179,9 @@ async function checkForLatestVersion() {
     const latestVersionJSON = await latestVersionResp.json();
     latestVersion = latestVersionJSON.version;
   }
-  if (Number(latestVersion) && Number(CURRENT_VERSION) !== Number(latestVersion)) {
-    if (Number(latestVersion) > Number(CURRENT_VERSION)) {
-      console.warn(`Latest version is available. Hard reload to fetch latest copy.`);
-      const latestVersionDiv = document.getElementById("latest-version");
-      latestVersionDiv.innerHTML = `${unixEpochToVersion(latestVersion)} [LATEST]`;
-    } else {
-      console.log(
-        `Current version: ${unixEpochToVersion(
-          CURRENT_VERSION
-        )}, Latest version: ${unixEpochToVersion(latestVersion)}`
-      );
-      const latestVersionDiv = document.getElementById("latest-version");
-      latestVersionDiv.innerHTML = `${unixEpochToVersion(latestVersion)} [LATEST]`;
-    }
+  if (Number(latestVersion)) {
+    const latestVersionDiv = document.getElementById("latest-version");
+    latestVersionDiv.innerHTML = `${unixEpochToVersion(latestVersion)} [LATEST]`;
   }
 }
 
