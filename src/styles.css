@@ -116,7 +116,6 @@ body {
   display: flex;
 }
 
-.banner-info {
-  background-color: #ff0000;
-  padding: 16px;
+.is-new {
+  color: #ffff00;
 }

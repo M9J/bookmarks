@@ -180,8 +180,15 @@ async function checkForLatestVersion() {
     latestVersion = latestVersionJSON.version;
   }
   if (Number(latestVersion)) {
+    let isNew = Number(latestVersion) > Number(CURRENT_VERSION);
     const latestVersionDiv = document.getElementById("latest-version");
-    latestVersionDiv.innerHTML = `${unixEpochToVersion(latestVersion)} [LATEST]`;
+    if (isNew) {
+      latestVersionDiv.innerHTML = `${unixEpochToVersion(
+        latestVersion
+      )} <span class="is-new">[LATEST]</span>`;
+    } else {
+      latestVersionDiv.innerHTML = `${unixEpochToVersion(latestVersion)} [LATEST]`;
+    }
   }
 }
 
