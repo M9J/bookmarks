@@ -92,25 +92,19 @@ async function getFavicons() {
       const item = alinks.item(i);
       const href = item.getAttribute("href");
       const bkIcon = item.getAttribute("data-bookmark-icon");
-      const itemIconImage = item.getElementsByTagName("img").item(0);
-      if (bkIcon) {
-        if (itemIconImage) {
-          itemIconImage.setAttribute("src", bkIcon);
-          itemIconImage.onerror = function () {
-            this.src = IMG_PLACEHOLDER;
-          };
-          continue;
-        }
-      }
-      if (href) {
+      let iconLink = null;
+      if (bkIcon) iconLink = bkIcon;
+      else if (href) {
         const hrefURL = new URL(href);
         const baseHref = hrefURL.protocol + "//" + hrefURL.hostname;
-        if (itemIconImage) {
-          itemIconImage.setAttribute("src", CONFIG.faviconFetchServiceURL(baseHref));
-          itemIconImage.onerror = function () {
-            this.src = IMG_PLACEHOLDER;
-          };
-        }
+        iconLink = CONFIG.faviconFetchServiceURL(baseHref);
+      }
+      const itemIconImage = item.getElementsByTagName("img").item(0);
+      if (itemIconImage) {
+        itemIconImage.setAttribute("src", iconLink);
+        itemIconImage.onerror = function () {
+          this.src = IMG_PLACEHOLDER;
+        };
       }
     }
   }
